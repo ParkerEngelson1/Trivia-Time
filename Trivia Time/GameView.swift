@@ -5,8 +5,11 @@ struct GameView: View {
     @State private var questions: [String] = [] // question list
     @State private var currentQuestion: String = "" // question being shown
     @State private var result: String = ""
+    @State private var streak: Int = 0
+    @State private var highScore: Int = 0
     var body: some View {
         VStack {
+          
             Button("Load Questions") { // brings new question
                 result = ""
                 questions = loadQuestions() // load question onto new array
@@ -15,32 +18,65 @@ struct GameView: View {
                 }
             }
             var printingString = String(currentQuestion.dropFirst())
-
+            
             Text(printingString) // question
+            
             Button("1") {
                 if currentQuestion.first == "1" {
                     result = "Correct"
+                    streak += 1
+                    if streak > highScore {
+                        highScore = streak
+                    }
+                } else {
+                    result = "False"
+                    streak = 0
                 }
             }
             Button("2") {
                 if currentQuestion.first == "2" {
                     result = "Correct"
+                    streak += 1
+                    if streak > highScore {
+                        highScore = streak
+                    }
+                } else {
+                    result = "False"
+                    streak = 0
                 }
             }
             Button("3") {
                 if currentQuestion.first == "3" {
                     result = "Correct"
+                    streak += 1
+                    if streak > highScore {
+                        highScore = streak
+                    }
+                } else {
+                    result = "False"
+                    streak = 0
                 }
             }
             Button("4") {
-                if currentQuestion.first == "4" {
+                if currentQuestion.first == "4" { //checks if question is correct, then adds to streak
                     result = "Correct"
+                    streak += 1
+                    if streak > highScore {
+                        highScore = streak
+                    }
+                } else {
+                    result = "False"
+                    streak = 0
                 }
             }
             Text(result)
             
+            Text("🔥\(streak)")// Displays current streak
+            
+            Text("👑\(highScore)") // Displays highscore
         }
     }
+    
 }
 
 func loadQuestions() -> [String] { // holds questions
