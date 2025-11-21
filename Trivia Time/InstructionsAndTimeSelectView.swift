@@ -7,7 +7,9 @@
 import SwiftUI
 struct InstructionsView: View {
     var body: some View {
-        Text("Instructions and Time Select View")
+        Text("Instructions")
+            .font(.largeTitle)
+            .bold()
     }
 }
 #Preview {

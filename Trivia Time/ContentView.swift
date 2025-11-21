@@ -8,19 +8,19 @@
 import SwiftUI
 
 struct ContentView: View {
-    private var time = 1
+    private var time = 200
     var body: some View {
-        Text("Trivia Time")
-            .font(.largeTitle)
-            .fontWeight(.bold)
-            .padding()
+        
         NavigationView {
             
             VStack {
+                Text("Trivia Time") // title
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .padding()
                 
-                
-                NavigationLink("PLAY", destination: InstructionsView())
-                Picker(selection: .constant(4), label: Text("Time")) {
+                NavigationLink("Instructions", destination: InstructionsView()) // button to access instructions
+                Picker(selection: .constant(4), label: Text("Time")) { // time selection still to be updated
                     Text("30").tag(1)
                     Text("1:00").tag(2)
                     Text("1:30").tag(3)
