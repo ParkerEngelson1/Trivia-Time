@@ -9,31 +9,22 @@ import SwiftUI
 
 struct ContentView: View {
     private var time = 200
+    @State private var highScore: Int = 0 //highscore declaration
     var body: some View {
-        
         NavigationView {
-            
             VStack {
                 Text("Trivia Time") // title
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .padding()
-                NavigationLink("Play", destination: GameView()) // sends to PlayView
+                Text("\(highScore)") // displays highscore
+                NavigationLink("Play", destination: GameView(highScore: $highScore)) // sends to GameView
                 NavigationLink("Instructions", destination: InstructionsView()) // button to access instructions
-                Picker(selection: .constant(4), label: Text("Time")) { // time selection still to be updated
-                    Text("30").tag(1)
-                    Text("1:00").tag(2)
-                    Text("1:30").tag(3)
-                    Text("2:00").tag(4)
-                        //might delete, considering shifting to a streak based game
-                }
+                
             }
         }
     }
 }
-//ADD NUMBERS TO BEGINNING OF STRINGS
-//CALL SUBSTRING 0 TO NOTE ANSWER
-//WHEN DISPLAYING QUESTION REMOVE THE BEGINNING OF THE STRING
 #Preview {
     ContentView()
 }

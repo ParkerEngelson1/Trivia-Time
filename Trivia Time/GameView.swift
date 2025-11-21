@@ -4,23 +4,20 @@ struct GameView: View {
     
     @State private var questions: [String] = [] // question list
     @State private var currentQuestion: String = "" // question being shown
-    @State private var result: String = ""
+    @State private var result: String = "" // place holder for correct
     @State private var streak: Int = 0
-    @State private var highScore: Int = 0
+    @Binding var highScore: Int //Makes sure the highscorer is able to travel to Content and game view
     var body: some View {
         VStack {
-          
-            Button("Load Questions") { // brings new question
+            Button("Next Questions") { // brings new question
                 result = ""
                 questions = loadQuestions() // load question onto new array
                 if !questions.isEmpty { // Check to look for empty array
                     currentQuestion = questions.randomElement() ?? ""
                 }
             }
-            var printingString = String(currentQuestion.dropFirst())
-            
-            Text(printingString) // question
-            
+            var printingString = String(currentQuestion.dropFirst()) // removes character (the answer)
+            Text(printingString) // question to be displayed
             Button("1") {
                 if currentQuestion.first == "1" {
                     result = "Correct"
@@ -70,13 +67,10 @@ struct GameView: View {
                 }
             }
             Text(result)
-            
             Text("🔥\(streak)")// Displays current streak
-            
             Text("👑\(highScore)") // Displays highscore
         }
     }
-    
 }
 
 func loadQuestions() -> [String] { // holds questions
@@ -84,5 +78,5 @@ func loadQuestions() -> [String] { // holds questions
 }
 
 #Preview {
-    GameView()
+    GameView(highScore: .constant(0)) // sends to content view and starts at 0
 }
