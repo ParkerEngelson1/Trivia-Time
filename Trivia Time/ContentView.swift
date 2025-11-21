@@ -31,7 +31,9 @@ struct ContentView: View {
         }
     }
 }
-
+//ADD NUMBERS TO BEGINNING OF STRINGS
+//CALL SUBSTRING 0 TO NOTE ANSWER
+//WHEN DISPLAYING QUESTION REMOVE THE BEGINNING OF THE STRING
 #Preview {
     ContentView()
 }
