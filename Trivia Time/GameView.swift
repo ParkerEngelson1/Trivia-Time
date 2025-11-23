@@ -4,12 +4,12 @@ struct GameView: View {
     
     @State private var questions: [String] = [] // question list
     @State private var currentQuestion: String = "" // question being shown
-    @State private var result: String = "" // place holder for correct
-    @State private var streak: Int = 0
+    @State private var result: String = "" // place holder for correct or false
+    @State private var streak: Int = 0 
     @Binding var highScore: Int //Makes sure the highscorer is able to travel to Content and game view
     var body: some View {
         VStack {
-            Button("Next Questions") { // brings new question
+            Button("Next Question") { // brings new question
                 result = ""
                 questions = loadQuestions() // load question onto new array
                 if !questions.isEmpty { // Check to look for empty array
