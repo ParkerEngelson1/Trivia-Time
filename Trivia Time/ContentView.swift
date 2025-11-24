@@ -21,10 +21,10 @@ struct ContentView: View {
                     .fontWeight(.bold)
                     .padding(.top, 40)
                 HStack{ // allows me to shrink the emoji
-                    Text("🎤") // displays highscore
+                    Text("🎤") // displays emoji
                         .font(Font.custom("San Francisco", size: 100))
                         .fontWeight(.bold)
-                    Text("\(highScore)")
+                    Text("\(highScore)") // displays score
                         .font(Font.custom("San Francisco", size: 150))
                         .fontWeight(.bold)
                 }
