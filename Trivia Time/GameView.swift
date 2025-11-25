@@ -1,80 +1,89 @@
 import SwiftUI
-
 struct GameView: View {
-    
-    @State private var questions: [String] = [] // question list
-    @State private var currentQuestion: String = "" // question being shown
+    private let questionBank = QuestionBank() // loads question bank
+    @State private var currentQuestion: Question? // question being shown
     @State private var result: String = "" // place holder for correct or false
-    
-    @State private var streak: Int = 0
+    @State private var streak: Int = 0 // streak
     @Binding var highScore: Int //Makes sure the highscorer is able to travel to Content and game view
     var body: some View {
         VStack {
-            Text(String(currentQuestion.dropFirst())) // question to be displayed
-            HStack { // Makes buttons into 2x2 grid
-                Button("1") {
-                    if currentQuestion.first == "1" {
-                        result = "Correct"
-                        streak += 1
-                        if streak > highScore {
-                            highScore = streak
-                        }
-                    } else {
-                        result = "False"
-                        streak = 0
-                    }
-                    loadNewQuestion()
-                }
-                .buttonStyle(CustomButtonStyle())
-                Button("2") {
-                    if currentQuestion.first == "2" {
-                        result = "Correct"
-                        streak += 1
-                        if streak > highScore {
-                            highScore = streak
-                        }
-                    } else {
-                        result = "False"
-                        streak = 0
-                    }
-                    loadNewQuestion()
-                }
-                
+            if let q = currentQuestion { // sends question
+                Text(q.text) // <-- this displays the question text
+                    .font(.title2)
+                    .bold()
+                    .multilineTextAlignment(.center)
             }
-            .buttonStyle(CustomButtonStyle())
-            HStack {
-                Button("3") {
-                    if currentQuestion.first == "3" {
-                        result = "Correct"
-                        streak += 1
-                        if streak > highScore {
-                            highScore = streak
+            Text(result) // true or false
+            if let q = currentQuestion { // initializes question (always true)
+                HStack { // Makes buttons into 2x2 grid
+                    Button(q.answers[0]) { // First answer
+                        if 0 == q.correctAnswerIndex { // checks for correct answer
+                            result = "Correct" // returns correct
+                            streak += 1 // adds to streak
+                            if streak > highScore { // checks if streak is greater than the high score
+                                highScore = streak // if the streak is greater than high score it updates
+                            }
+                        } else {
+                            result = "False" // if incorrect returns false
+                            streak = 0 // streak reset
                         }
-                    } else {
-                        result = "False"
-                        streak = 0
+                        DispatchQueue.main.asyncAfter(deadline:  .now() + 3)  { // waits 3 seconds
+                            loadNewQuestion() // loads a new question
+                        }
                     }
-                    loadNewQuestion()
+                    .buttonStyle(CustomButtonStyle()) // button style
+                    Button(q.answers[1]) {
+                        if 1 == q.correctAnswerIndex {
+                            result = "Correct"
+                            streak += 1
+                            if streak > highScore {
+                                highScore = streak
+                            }
+                        } else {
+                            result = "False"
+                            streak = 0
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                            loadNewQuestion()
+                        }
+                    }
+                    .buttonStyle(CustomButtonStyle())
                 }
-                .buttonStyle(CustomButtonStyle())
-               
-                
-                Button("4") {
-                    if currentQuestion.first == "4" { //checks if question is correct, then adds to streak
-                        result = "Correct"
-                        streak += 1
-                        if streak > highScore {
-                            highScore = streak
+                HStack {
+                    Button(q.answers[2]) {
+                        if 2 == q.correctAnswerIndex {
+                            result = "Correct"
+                            streak += 1
+                            if streak > highScore {
+                                highScore = streak
+                            }
+                        } else {
+                            result = "False"
+                            streak = 0
                         }
-                    } else {
-                        result = "False"
-                        streak = 0
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                            loadNewQuestion()
+                        }
                     }
-                    loadNewQuestion()
+                    .buttonStyle(CustomButtonStyle())
+                    Button(q.answers[3]) {
+                        if 3 == q.correctAnswerIndex {
+                            result = "Correct"
+                            streak += 1
+                            if streak > highScore {
+                                highScore = streak
+                            }
+                        } else {
+                            result = "False"
+                            streak = 0
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                            loadNewQuestion()
+                        }
+                    }
+                    .buttonStyle(CustomButtonStyle())
                 }
             }
-            .buttonStyle(CustomButtonStyle())
-            Text(result)
             Text("🔥\(streak)")// Displays current streak
             Text("👑\(highScore)") // Displays highscore
         }
@@ -83,24 +92,35 @@ struct GameView: View {
         }
     }
     
-    func loadNewQuestion() { // helper function for convenience
-        result = ""
-        questions = loadQuestions()
-        if !questions.isEmpty {
-            currentQuestion = questions.randomElement() ?? ""
-        }
-        
+    func loadNewQuestion() { // helper method to load question bank into gameview
+        currentQuestion = questionBank.randomQuestion() // initializes
+        result = "" // sets result blank
     }
 }
 
-func loadQuestions() -> [String] { // holds questions
-    return ["1What Year is it? 1: 2025, 2: 2020, 3: 2019, 4: 2018", "2What state are we in? 1: Texas, 2: Illinois, 3: California, 4: New York", "3What is the capital of Texas? 1: Austin, 2: Houston, 3: Dallas, 4: San Antonio", "4What is the capital of California? 1: San Francisco, 2: Los Angeles, 3: San Diego, 4: Sacramento", "3Whats my name? 1: Alex, 2: Ben, 3: Parker, 4: David"]
+struct Question { // creates a question object when called with 3 parameters
+    let text: String // question that is given
+    let answers: [String] // array with correct answer + 3 decoy answers
+    let correctAnswerIndex: Int // index of correct answer in the answers[] array
 }
-struct CustomButtonStyle1: ButtonStyle { // buttons for navigation links
+
+struct QuestionBank { //
+    let questions: [Question] = [
+        Question(text: "What year is it?", answers: ["2025", "2020", "2019", "2018"], correctAnswerIndex: 0),
+        Question(text: "What state are we in?", answers: ["Texas", "Illinois", "California", "New York"], correctAnswerIndex: 1),
+        Question(text: "What is the capital of Texas?", answers: ["Austin", "Houston", "Dallas", "San Antonio"], correctAnswerIndex: 0),
+        Question(text: "What is the capital of California?", answers: ["San Francisco", "Los Angeles", "San Diego", "Sacramento"], correctAnswerIndex: 3),
+        Question(text: "What's my name?", answers: ["Alex", "Ben", "Parker", "David"], correctAnswerIndex: 2)
+    ] // questions array holding question objects
+    
+    func randomQuestion() -> Question { // method that calls a random integer in the questions array
+        questions.randomElement()!
+    }
+}
+
+struct CustomButtonStyle1: ButtonStyle { // buttons for answers
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-      
-        
             .frame(width: 130, height: 30)
             .bold()
             .padding()
@@ -111,5 +131,5 @@ struct CustomButtonStyle1: ButtonStyle { // buttons for navigation links
 }
 
 #Preview {
-    GameView(highScore: .constant(0)) // sends to content view and starts at 0
+    GameView(highScore: .constant(0)) // sends highscore to content view and starts at 0
 }
