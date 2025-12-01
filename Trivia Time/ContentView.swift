@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     private var time = 200
     @State private var highScore: Int = 0 //highscore
+    @State private var inGame: Bool = false //ChatGPT 1
     var body: some View {
         NavigationView {
             VStack {
@@ -34,16 +35,21 @@ struct ContentView: View {
                 Spacer()
                 Spacer()
                 HStack{ // puts buttons side by side
-                    NavigationLink("Play", destination: GameView(highScore: $highScore)) // sends to GameView
-                        .font(.title2)
-                    NavigationLink("Instructions", destination: InstructionsView()) // button to access instructions
+                    NavigationLink( //ChatGPT 1
+                        destination: GameView(highScore: $highScore, inGame: $inGame),
+                        isActive: $inGame
+                    ) {
+                        Text("Play")
+                            .font(.title2)
+                    }
+                    NavigationLink("Instructions", destination: InstructionsView())
                         .font(.title2)
                 }
-                .buttonStyle(CustomButtonStyle())
-                .padding(.bottom, 100)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .buttonStyle(CustomButtonStyle())
+            .padding(.bottom, 100)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 

@@ -5,14 +5,24 @@ struct GameView: View {
     @State private var result: String = "" // place holder for correct or false
     @State private var streak: Int = 0 // streak
     @Binding var highScore: Int //Makes sure the highscorer is able to travel to Content and game view
+    @Binding var inGame: Bool
     var body: some View {
         VStack {
             if let q = currentQuestion { // sends question
-                Text(q.text) // <-- this displays the question text
-                    .font(.title2)
-                    .bold()
-                    .multilineTextAlignment(.center)
+                Text(q.text) // displays the question text
+                    .italic()
+                    .fontWeight(.bold)
+                    .position(x: 200, y: 100)
+                    .font(.custom("Arial", size: 40))
+                    .safeAreaPadding(/*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
             }
+            HStack{
+                Text("🔥\(streak)")// Displays current streak
+                Text(" ")
+                Text("👑\(highScore)") // Displays highscore
+            }
+            .font(.custom("Arial", size: 80))
+            .padding(40)
             Text(result) // true or false
             if let q = currentQuestion { // initializes question (always true)
                 HStack { // Makes buttons into 2x2 grid
@@ -26,6 +36,8 @@ struct GameView: View {
                         } else {
                             result = "False" // if incorrect returns false
                             streak = 0 // streak reset
+                            inGame = false
+                            return
                         }
                         DispatchQueue.main.asyncAfter(deadline:  .now() + 3)  { // waits 3 seconds
                             loadNewQuestion() // loads a new question
@@ -42,6 +54,8 @@ struct GameView: View {
                         } else {
                             result = "False"
                             streak = 0
+                            inGame = false // if incorrect changes inGame variable to false, then moving user to contentView
+                            return
                         }
                         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                             loadNewQuestion()
@@ -60,6 +74,8 @@ struct GameView: View {
                         } else {
                             result = "False"
                             streak = 0
+                            inGame = false
+                            return
                         }
                         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                             loadNewQuestion()
@@ -76,6 +92,8 @@ struct GameView: View {
                         } else {
                             result = "False"
                             streak = 0
+                            inGame = false
+                            return
                         }
                         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                             loadNewQuestion()
@@ -84,12 +102,11 @@ struct GameView: View {
                     .buttonStyle(CustomButtonStyle())
                 }
             }
-            Text("🔥\(streak)")// Displays current streak
-            Text("👑\(highScore)") // Displays highscore
         }
         .onAppear { // allows question to immediately load
             loadNewQuestion()
         }
+        Spacer()
     }
     
     func loadNewQuestion() { // helper method to load question bank into gameview
@@ -131,5 +148,5 @@ struct CustomButtonStyle1: ButtonStyle { // buttons for answers
 }
 
 #Preview {
-    GameView(highScore: .constant(0)) // sends highscore to content view and starts at 0
+    GameView(highScore: .constant(0), inGame: .constant(true)) // ChatGPT1
 }
