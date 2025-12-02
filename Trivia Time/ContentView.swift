@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    private var time = 200
-    @State private var highScore: Int = 0 //highscore
+    @State private var highScore: Int = 0 // gets highscore from GameView
     @State private var inGame: Bool = false //ChatGPT 1
     var body: some View {
         NavigationView {
@@ -25,31 +24,23 @@ struct ContentView: View {
                     Text("🎤") // displays emoji
                         .font(Font.custom("San Francisco", size: 100))
                         .fontWeight(.bold)
-                    Text("\(highScore)") // displays score
+                    Text("\(highScore)") // displays players highcore
                         .font(Font.custom("San Francisco", size: 150))
                         .fontWeight(.bold)
                 }
-                .frame(maxWidth: .infinity)
-                .multilineTextAlignment(.center)
                 .padding(.top, 20)
                 Spacer()
                 Spacer()
                 HStack{ // puts buttons side by side
-                    NavigationLink( //ChatGPT 1
-                        destination: GameView(highScore: $highScore, inGame: $inGame),
-                        isActive: $inGame
-                    ) {
-                        Text("Play")
-                            .font(.title2)
-                    }
-                    NavigationLink("Instructions", destination: InstructionsView())
+                    NavigationLink("Play", destination: GameView(highScore: $highScore, inGame: $inGame), isActive: $inGame) // sends to game view
                         .font(.title2)
-                }
+                    NavigationLink("Instructions", destination: InstructionsView()) // sends to instructions view
+                        .font(.title2)
+                } //ChatGPT: "Using swift, How should I send a user back to the starting view after answering a question incorrectly? for reference, the user starts in a ContentView then plays the quiz in GameView"
             }
-            .buttonStyle(CustomButtonStyle())
+            .buttonStyle(CustomButtonStyle()) // loads custom button style for each of the buttons
             .padding(.bottom, 100)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
