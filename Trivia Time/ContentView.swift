@@ -30,7 +30,7 @@ struct ContentView: View {
                 }
                 .padding(.top, 20)
                 Spacer()
-                Spacer()
+                Spacer()                
                 HStack{ // puts buttons side by side
                     NavigationLink("Play", destination: GameView(highScore: $highScore, inGame: $inGame), isActive: $inGame) // sends to game view
                         .font(.title2)
