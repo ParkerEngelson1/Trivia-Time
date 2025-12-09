@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  Trivia Time
+//  Beat Brain
 //
 //  Created by Parker Engelson on 11/20/25.
 //
